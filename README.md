@@ -1,52 +1,25 @@
 # AIOps Simulation Challenge
-
 This project simulates an AIOps workflow for a `payment-service` that handles payment requests. The goal is to detect abnormal service behavior, convert it into events, and pass those events through a simple producer-topic-consumer flow.
 
 ## Scenario
 
 The service normally processes requests successfully with low latency and moderate resource consumption. When response time or resource usage spikes, and error logs appear, the system should flag the event as an anomaly and route it through the processing pipeline.
 
-## Operational data analysis
+## Operational data
 
-The dataset in `data/service_data.json` contains synthetic operational records for the `payment-service`.
+The dataset in `data/service_data.json` contains service telemetry:
 
-### 1. Metric fields
-The metric fields are:
+- `timestamp`
+- `service`
 - `response_time_ms`
 - `cpu_percent`
 - `memory_percent`
-
-These represent quantitative service performance and resource usage metrics.
-
-### 2. Log information
-The log-related fields are:
 - `log_level`
 - `message`
 
-These capture the severity and textual description of the event.
+Normal records have low latency, moderate CPU/memory values, and `INFO` messages like `Payment request processed successfully`.
 
-### 3. Use of timestamps
-The `timestamp` field records when each observation was generated. The records progress in a sequence from `2026-09-20T10:00:00` to `2026-09-20T10:09:00`, allowing the workflow to observe a pattern over time. The anomaly window becomes clear around `10:05:00` and `10:06:00`.
-
-### 4. Normal behavior
-Normal observations include:
-- `response_time_ms` around 120–150 ms
-- `cpu_percent` around 42–50%
-- `memory_percent` around 51–57%
-- `log_level` values of `INFO`
-- message text such as `Payment request processed successfully`
-
-These values indicate expected, stable service operation.
-
-### 5. Unusual behavior
-Unusual observations include:
-- `response_time_ms` of 610 and 640 ms
-- `cpu_percent` of 75% and 94%
-- `memory_percent` of 70% and 91%
-- `log_level` values of `ERROR`
-- messages such as `Payment service timeout` and `Database connection timeout`
-
-These records indicate degraded service performance and likely operational issues.
+Abnormal records show high latency and resource usage with `ERROR` messages like `Payment service timeout` and `Database connection timeout`.
 
 ## Anomaly detection
 
